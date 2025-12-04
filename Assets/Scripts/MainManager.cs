@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,21 +12,31 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
 
     public Text ScoreText;
+    public Text playerNameText;
+
+    public Text HighestScoreText;
+
     public GameObject GameOverText;
-    
+
+    public MainManager mainManagerRef;
+
     private bool m_Started = false;
-    private int m_Points;
-    
+    [SerializeField] private int m_Points;
+    [SerializeField] private int m_HighestScore;
+
     private bool m_GameOver = false;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
+
+        GameManagerCacheComponents();
+        ShowPlayerName();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
-        int[] pointCountArray = new [] {1,1,2,2,5,5};
+
+        int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
         for (int i = 0; i < LineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
@@ -36,6 +47,16 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+    }
+
+
+    /// <summary>
+    /// Caches all the components or GameObjects for the GameManager
+    /// </summary>
+    public void GameManagerCacheComponents()
+    {
+        mainManagerRef = GameObject.Find("MainManager").GetComponent<MainManager>();
+        GameManager.instance.mainManagerRef = mainManagerRef;
     }
 
     private void Update()
@@ -55,22 +76,80 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
+            GameOverLogic();
         }
     }
 
+
+    public void GameOverLogic()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameManager.instance.SavePlayerInfo();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameManager.instance.SavePlayerInfo();
+            ExitToMainMenu();
+        }
+    }
+
+
+    int HighScoreCheck()
+    {
+        if(m_Points <= m_HighestScore)
+        {
+            return m_HighestScore;
+        }
+        else {  return m_Points;}
+
+    }
+
+
     void AddPoint(int point)
     {
+
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+
+        m_HighestScore = m_Points;
+        GameManager.instance.score = m_Points;
     }
+
+    void ShowPlayerName()
+    {
+        string playerName = GameManager.instance.playerName;
+        playerNameText.text = $"{playerName}";
+
+    }
+
+    /*
+    void ShowHighesetScore()
+    {
+        string championName = HighScoreManager.instance.championName;
+        int championScore = HighScoreManager.instance.highestScore;
+
+        HighestScoreText.text = $"Highest score->{championName}: {championScore}";
+
+    }
+    */
+
+    /*
+    public int GetScore()
+    {
+        return m_Points;
+    }
+    */
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    public void ExitToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
