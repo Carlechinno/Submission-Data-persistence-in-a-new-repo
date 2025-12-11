@@ -1,5 +1,3 @@
-Fix the HighScore text on main Scene to show the highest score
-
 Add a new Scene that shows a score board
 
 Add a settings Scene to control different aspects of the game

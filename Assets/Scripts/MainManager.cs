@@ -96,15 +96,6 @@ public class MainManager : MonoBehaviour
     }
 
 
-    int HighScoreCheck()
-    {
-        if(m_Points <= m_HighestScore)
-        {
-            return m_HighestScore;
-        }
-        else {  return m_Points;}
-
-    }
 
 
     void AddPoint(int point)
@@ -124,24 +115,7 @@ public class MainManager : MonoBehaviour
 
     }
 
-    /*
-    void ShowHighesetScore()
-    {
-        string championName = HighScoreManager.instance.championName;
-        int championScore = HighScoreManager.instance.highestScore;
-
-        HighestScoreText.text = $"Highest score->{championName}: {championScore}";
-
-    }
-    */
-
-    /*
-    public int GetScore()
-    {
-        return m_Points;
-    }
-    */
-
+    
     public void GameOver()
     {
         m_GameOver = true;

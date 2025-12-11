@@ -671,6 +671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HighScoreManager
   mainManagerRef: {fileID: 0}
+  championNameText: {fileID: 2078529056}
   highestScore: 0
   championName: 
 --- !u!4 &327279257

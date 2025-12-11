@@ -1,4 +1,9 @@
+using JetBrains.Annotations;
+using System.Drawing.Text;
+using System.IO;
+using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class HighScoreManager : MonoBehaviour
 {
@@ -7,13 +12,18 @@ public class HighScoreManager : MonoBehaviour
 
     public MainManager mainManagerRef;
 
+    public Text championNameText;
+
     public int highestScore;
+
 
     public string championName;
 
 
     private void Awake()
     {
+        GameManagerCacheComponents();
+
 
         //Singleton Design Pattern
         if (instance == null)
@@ -26,6 +36,7 @@ public class HighScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        ShowChampionDetails();
 
 
     }
@@ -40,26 +51,12 @@ public class HighScoreManager : MonoBehaviour
         GameManager.instance.mainManagerRef = mainManagerRef;
     }
 
-
-
-    public int HigherScoreCheck(int currentScore)
+    private void ShowChampionDetails()
     {
-        if(currentScore <= highestScore)
-        {
-            return highestScore;
-        }
-        else
-            return currentScore;
-
+        string championName = GameManager.instance.championName;
+        int highestScore = GameManager.instance.highestScore;
+        championNameText.text = $"Highest Score:{championName}: {highestScore}";
     }
-
-    void LoadChampionData()
-    {
-
-    }
-
-
-
 
 
 
