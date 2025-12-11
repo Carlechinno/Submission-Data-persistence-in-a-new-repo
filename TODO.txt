@@ -1,3 +1,5 @@
+Make sure confirm logic works
+
 Add a new Scene that shows a score board
 
 Add a settings Scene to control different aspects of the game

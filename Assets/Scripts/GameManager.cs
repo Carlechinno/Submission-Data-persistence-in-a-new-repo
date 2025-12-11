@@ -17,10 +17,15 @@ public class GameManager : MonoBehaviour
 
     public TMP_InputField playerNameInput;
 
+    public Button confirmButton;
+    public Button startButton;
+
     public string playerName = "Player";
 
     public string championName;
 
+
+    [SerializeField] private bool isConfirmed = false;
 
     public int score = 0;
     public int highestScore;
@@ -30,6 +35,8 @@ public class GameManager : MonoBehaviour
 
         //Debug.Log("PersistentPath = " + Application.persistentDataPath);
 
+        // Add listener to detect text changes
+        playerNameInput.onValueChanged.AddListener(OnNameChanged);
         // If there is already an instance AND it's not this one
         if (instance != null && instance != this)
         {
@@ -47,12 +54,30 @@ public class GameManager : MonoBehaviour
 
 
 
+    private void OnNameChanged(string newText)
+    {
+        // If the user edits the text AFTER confirming:
+        isConfirmed = false;
 
+        // Change color back to red
+        confirmButton.image.color = Color.red;
+    }
 
     public void SubmitPlayerName()
     {
-        playerName = playerNameInput.text;
-
+        if (!string.IsNullOrWhiteSpace(playerNameInput.text))
+        {
+            isConfirmed = true;
+            playerName = playerNameInput.text;
+            confirmButton.image.color = Color.green;
+            startButton.interactable = true;
+        }
+        else
+        {
+            isConfirmed = false;
+            confirmButton.image.color = Color.red;
+            startButton.interactable = false;
+        }
     }
 
 
@@ -102,7 +127,7 @@ public class GameManager : MonoBehaviour
 
         string json = File.ReadAllText(path);
 
-        if (string.IsNullOrEmpty(json)) {  return; }
+        if (string.IsNullOrEmpty(json)) { return; }
 
         SaveDataManager.SaveDataList list = JsonUtility.FromJson<SaveDataManager.SaveDataList>(json);
 
@@ -125,6 +150,12 @@ public class GameManager : MonoBehaviour
 
     public void StartNew()
     {
+        if (!isConfirmed)
+        {
+            Debug.Log("Please Confirm Player Name");
+            return;
+        }
+
         SceneManager.LoadScene(1);
     }
 
