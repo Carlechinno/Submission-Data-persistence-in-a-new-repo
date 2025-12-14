@@ -196,6 +196,13 @@ public class GameManager : MonoBehaviour
         // Sort list so highest score is first
         list.playerAndScoreList.Sort((a, b) => b._score.CompareTo(a._score));
 
+        if (list.playerAndScoreList.Count > 0)
+        {
+            var best = list.playerAndScoreList[0];
+            championName = best._name;
+            highestScore = best._score;
+        }
+
         // Serialize back into JSON (pretty print = true)
         string newJson = JsonUtility.ToJson(list, true);
 

@@ -33,6 +33,7 @@ public class MainManager : MonoBehaviour
 
         GameManagerCacheComponents();
         ShowPlayerName();
+        ShowHighestScore();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
 
@@ -126,4 +127,19 @@ public class MainManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+
+
+    void ShowHighestScore()
+    {
+        string champName = GameManager.instance.championName;
+        int bestScore = GameManager.instance.highestScore;
+
+        // Fallback if empty
+        if (string.IsNullOrWhiteSpace(champName))
+            champName = "None";
+
+        HighestScoreText.text = $"Highest Score: {champName}: {bestScore}";
+    }
+
+
 }
